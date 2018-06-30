@@ -1,0 +1,64 @@
+<RoundedButton@Button>:
+    color: 0, 0, 0, 1
+    background_color: 1, 1, 1, 0 
+    pressed_color: .6, .6, .6, 1 
+    normal_color: .8, .8, .8, 1 
+    bg_color: .8, .8, .8, 1 
+    on_touch_down: self.bg_color = self.pressed_color if self.collide_point(*args[1].pos) else self.bg_color
+    on_touch_up: self.bg_color = self.normal_color if self.collide_point(*args[1].pos) else self.bg_color
+    canvas.before:
+        Color:
+            rgba: self.bg_color
+        RoundedRectangle:
+            size: self.size 
+            pos: self.pos
+            radius: (self.size[1]/2, self.size[1]/2)
+
+<Score@GridLayout>:
+    cols: 2
+    size_hint: 1, .16
+    Label:
+        id: name
+        text: "NAME"
+    Label:
+        id: score
+        text: "00000"
+
+<Hidden@Widget>:
+    opacity: 0
+    size_hint: 0, 0
+    pos_hint: { 'right': -1, 'top': -1 }
+    val: 0
+
+<RoundedTimer@RelativeLayout>:
+    id: parent
+    angle: 0
+    RelativeLayout:
+        id: angle_aware
+        size_hint: None, None
+        size: parent.size[0], parent.size[0]
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1
+            Ellipse:
+                size: self.size
+        canvas:
+            Color:
+                rgba: 0, .2, 1, 1
+            Ellipse:
+                size: self.size
+                angle_start: parent.angle
+                angle_end: 360
+        canvas.after:
+            Color:
+                rgba: 0, 0, 0, 1
+            Ellipse:
+                size: self.size[0] * 9/10, self.size[1] * 9/10
+                pos: self.size[0] * 1/20, self.size[1] * 1/20
+    RelativeLayout:
+        size_hint: None, None
+        size: parent.size[0], parent.size[0]
+        Label:
+            id: time
+            text: "90"
+            font_size: parent.size[0] * 0.5
